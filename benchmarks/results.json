@@ -35,8 +35,8 @@
         "change": 6.95e-05
       },
       "seconds": {
-        "fit": 0.3,
-        "passivity": 0.0771
+        "fit": 0.309,
+        "passivity": 0.0957
       }
     },
     "horizontal": {
@@ -74,8 +74,8 @@
         "change": 0.0
       },
       "seconds": {
-        "fit": 0.601,
-        "passivity": 0.245
+        "fit": 0.735,
+        "passivity": 0.397
       }
     },
     "bundled": {
@@ -113,8 +113,8 @@
         "change": 0.0
       },
       "seconds": {
-        "fit": 0.853,
-        "passivity": 0.292
+        "fit": 1.01,
+        "passivity": 0.324
       }
     },
     "double": {
@@ -158,8 +158,8 @@
         "change": 0.0
       },
       "seconds": {
-        "fit": 1.08,
-        "passivity": 0.415
+        "fit": 1.11,
+        "passivity": 0.481
       }
     },
     "cable_flat": {
@@ -209,8 +209,8 @@
         "change": 4.67e-05
       },
       "seconds": {
-        "fit": 1.41,
-        "passivity": 0.491
+        "fit": 1.64,
+        "passivity": 0.575
       }
     },
     "cable_trefoil": {
@@ -257,8 +257,8 @@
         "change": 0.000131
       },
       "seconds": {
-        "fit": 1.41,
-        "passivity": 0.941
+        "fit": 1.4,
+        "passivity": 0.832
       }
     }
   },

@@ -21,7 +21,7 @@ class LineFunctions(NamedTuple):
 
 @dataclass(frozen=True)
 class LineModel:
-    """Characteristic admittance yc and current-wave propagation h of a uniform line."""
+    """Characteristic admittance ``yc`` and current-wave propagation ``h`` of a uniform line."""
 
     yc: PoleResidue
     h: PoleResidue
@@ -34,16 +34,18 @@ class LineModel:
             raise ValueError("yc must be undelayed and h proper")
 
     def to_dict(self) -> dict[str, Any]:
+        """JSON-compatible representation."""
         return {"yc": self.yc.to_dict(), "h": self.h.to_dict()}
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
+        """Model from the output of :meth:`to_dict`."""
         return cls(PoleResidue.from_dict(data["yc"]), PoleResidue.from_dict(data["h"]))
 
 
 @dataclass(frozen=True)
 class LineReport:
-    """groups lists the modes sharing each delay of h."""
+    """``groups`` lists the modes sharing each delay of ``h``."""
 
     yc: FitReport
     h: FitReport
@@ -51,10 +53,10 @@ class LineReport:
 
 
 def line_functions(z: ArrayLike, y: ArrayLike, length: float) -> LineFunctions:
-    """Yc = Gamma Z^-1 and H = exp(-length Gamma) with Gamma = sqrt(Y Z), from per-metre Z and Y.
+    """``Yc = Gamma Z^-1`` and ``H = exp(-length Gamma)`` with ``Gamma = sqrt(Y Z)``.
 
-    Samples are taken at s = j omega with omega >= 0, or with positive damping; modes are ordered
-    by eigenvector continuity between consecutive samples.
+    ``z`` and ``y`` are per-metre samples at ``s = j omega`` with ``omega >= 0``, or with positive
+    damping; modes are ordered by eigenvector continuity between consecutive samples.
     """
     z, y = np.asarray(z, complex), np.asarray(y, complex)
     if z.ndim != 3 or z.shape[1] != z.shape[2] or y.shape != z.shape:
@@ -112,14 +114,14 @@ def fit_line(
     iterations: int = 20,
     tol: float = 1e-3,
 ) -> Result[LineModel, LineReport]:
-    """Universal-line-model fit from per-metre Z and Y sampled at frequencies f in Hz.
+    """Universal-line-model fit from per-metre ``z`` and ``y`` sampled at frequencies ``f`` in Hz.
 
     Yc is fitted in the phase domain with relative weights. Modes whose delays agree within
-    group_tol share one delay and h_poles poles, identified from their delay-removed modal
-    propagation functions; H is then fitted in the phase domain with all poles and delays fixed.
-    H residuals are weighted by 1 / ||I - H^2||, the relative sensitivity of the terminal
-    admittance to H. delays is "search" (minimize the modal residual), "phase" (phase delay at
-    the highest frequency) or one delay per mode.
+    ``group_tol`` share one delay and ``h_poles`` poles, identified from their delay-removed
+    modal propagation functions; H is then fitted in the phase domain with all poles and delays
+    fixed. H residuals are weighted by ``1 / ||I - H^2||``, the relative sensitivity of the
+    terminal admittance to H. ``delays`` is ``"search"`` (minimize the modal residual),
+    ``"phase"`` (phase delay at the highest frequency) or one delay per mode.
     """
     f = _frequencies(f)
     yc, h, gamma = line_functions(z, y, length)

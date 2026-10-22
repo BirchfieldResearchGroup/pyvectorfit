@@ -17,7 +17,7 @@ class Result(NamedTuple, Generic[M, R]):
 
 
 class Convolution(NamedTuple):
-    """Recursion x[n] = a x[n-1] + b0 u[n-1] + b1 u[n] with one entry per stored pole."""
+    """Recursion ``x[n] = a x[n-1] + b0 u[n-1] + b1 u[n]`` with one entry per stored pole."""
 
     a: NDArray[np.complex128]
     b0: NDArray[np.complex128]
@@ -58,11 +58,13 @@ def _layout(poles: ArrayLike, delays: ArrayLike, groups: ArrayLike | None):
 
 @final
 class PoleResidue:
-    """Delayed pole-residue model.
+    """Delayed pole-residue model, evaluated at complex ``s`` in rad/s by calling it::
 
-    F(s) = s e + sum_g exp(-s delays[g]) (d[g] + sum_{k in g} residues[k] / (s - poles[k])).
+        F(s) = s e + sum_g exp(-s delays[g]) (d[g] + sum_{k in g} residues[k] / (s - poles[k]))
+
     A complex pole is stored once, with positive imaginary part, and implies its conjugate pair.
-    Shapes: poles (N,), residues (N, *shape), d (G, *shape), e shape, delays (G,), groups (N,).
+    Shapes: ``poles (N,)``, ``residues (N, *shape)``, ``d (G, *shape)``, ``e shape``,
+    ``delays (G,)``, ``groups (N,)``.
     """
 
     __slots__ = ("d", "delays", "e", "groups", "poles", "residues")
@@ -112,6 +114,7 @@ class PoleResidue:
 
     @property
     def shape(self) -> tuple[int, ...]:
+        """Shape of the value at one frequency."""
         return self.residues.shape[1:]
 
     @property
@@ -134,7 +137,7 @@ class PoleResidue:
         return value.reshape(s.shape + self.shape)
 
     def response(self, f: ArrayLike) -> NDArray[np.complex128]:
-        """Evaluate at s = j 2 pi f for frequencies f in Hz."""
+        """Evaluate at ``s = j 2 pi f`` for frequencies ``f`` in Hz."""
         return self(2j * np.pi * _real(f, "f"))
 
     def to_dict(self) -> dict[str, Any]:
@@ -152,6 +155,7 @@ class PoleResidue:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
+        """Model from the output of :meth:`to_dict`."""
         if data.get("version") != 1:
             raise ValueError("unsupported PoleResidue format")
         poles = _join(data["poles"])
@@ -171,9 +175,10 @@ def _join(data: dict[str, Any]) -> NDArray[np.complex128]:
 
 
 def recursive_convolution(model: PoleResidue, dt: float) -> Convolution:
-    """Exact recursion for each pole state x' = p x + u, with u linear over each step dt.
+    """Exact recursion for each pole state ``x' = p x + u``, with ``u`` linear over each step.
 
-    A real pole contributes residue @ x to the output and a stored complex pole 2 Re(residue @ x).
+    A real pole contributes ``residue @ x`` to the output and a stored complex pole
+    ``2 Re(residue @ x)``.
     """
     if not np.isfinite(dt) or dt <= 0:
         raise ValueError("dt must be positive and finite")

@@ -17,7 +17,7 @@ _TINY = np.finfo(float).tiny
 
 @dataclass(frozen=True)
 class FitReport:
-    """history holds the weighted relative residual for the initial poles and each relocation."""
+    """``history`` holds the weighted relative residual at the start and after each relocation."""
 
     status: Literal["converged", "max_iterations", "fixed"]
     history: tuple[float, ...]
@@ -29,7 +29,7 @@ class FitReport:
 def relative_error(
     values: ArrayLike, reference: ArrayLike, *, floor: float = _FLOOR
 ) -> NDArray[np.float64]:
-    """Per-sample Frobenius error relative to max(||reference||, floor * max ||reference||)."""
+    """Per-sample Frobenius error relative to ``max(||reference||, floor * max ||reference||)``."""
     values, reference = np.asarray(values), np.asarray(reference)
     if values.shape != reference.shape or not values.ndim:
         raise ValueError("values and reference must share a shape with samples on axis 0")
@@ -51,11 +51,11 @@ def fit(
     iterations: int = 20,
     tol: float = 1e-3,
 ) -> Result[PoleResidue, FitReport]:
-    """Relaxed vector fitting of samples at frequencies f in Hz with one common set of poles.
+    """Relaxed vector fitting of samples at frequencies ``f`` in Hz with one common set of poles.
 
-    poles is the order (complex pairs count twice) or the starting poles. delay is removed from
-    the samples and stored in the model. Relocation stops once the weighted residual improves by
-    less than a fraction tol twice in a row; the best iterate is returned.
+    ``poles`` is the order (complex pairs count twice) or the starting poles. ``delay`` is removed
+    from the samples and stored in the model. Relocation stops once the weighted residual
+    improves by less than a fraction ``tol`` twice in a row; the best iterate is returned.
     """
     if not np.isfinite(delay) or delay < 0:
         raise ValueError("delay must be nonnegative and finite")

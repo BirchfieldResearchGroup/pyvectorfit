@@ -4,6 +4,8 @@ Vector fitting of delayed pole-residue models for electromagnetic transient (EMT
 rational fitting, universal line model fitting with modal delay identification, and passivity
 assessment and enforcement.
 
+[Documentation](https://pyvectorfit.readthedocs.io): examples, guide, benchmarks and API.
+
 ```bash
 pip install pyvectorfit
 ```

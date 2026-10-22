@@ -27,15 +27,24 @@ classifiers = [
 dependencies = ["numpy>=2.0", "scipy>=1.14"]
 
 [project.urls]
+Documentation = "https://pyvectorfit.readthedocs.io"
 Repository = "https://github.com/BirchfieldResearchGroup/pyvectorfit"
 Issues = "https://github.com/BirchfieldResearchGroup/pyvectorfit/issues"
 
 [dependency-groups]
 test = ["pytest>=8"]
 bench = ["matplotlib>=3.9"]
+docs = [
+    { include-group = "bench" },
+    "furo>=2025.12.19",
+    "myst-parser>=5",
+    "sphinx>=9",
+    "sphinx-copybutton>=0.5.2",
+    "sphinx-gallery>=0.22",
+]
 dev = [
     { include-group = "test" },
-    { include-group = "bench" },
+    { include-group = "docs" },
     "mypy>=1.15",
     "ruff>=0.15",
     "scipy-stubs",

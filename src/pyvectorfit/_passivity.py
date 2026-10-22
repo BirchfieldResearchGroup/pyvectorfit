@@ -31,7 +31,7 @@ _WITNESSES = 10
 
 @dataclass(frozen=True)
 class PassivityReport:
-    """margin is the smallest eigenvalue found of the Hermitian part, at frequency in Hz."""
+    """``margin`` is the smallest eigenvalue found of the Hermitian part, at ``frequency`` in Hz."""
 
     passive: bool
     scope: Literal["global", "sampled"]
@@ -42,7 +42,7 @@ class PassivityReport:
 
 @dataclass(frozen=True)
 class CorrectionReport:
-    """change is the largest relative change of the admittance over the correction frequencies."""
+    """``change`` is the largest relative change of the admittance on the correction frequencies."""
 
     iterations: int
     before: PassivityReport
@@ -54,8 +54,8 @@ def check_passivity(model: PoleResidue | LineModel, f: ArrayLike | None = None) 
     """Passivity of an admittance or impedance.
 
     An undelayed PoleResidue is assessed at all frequencies from the imaginary zeros of
-    F(s) + F(-s)^T. A delayed PoleResidue and the terminal admittance of a LineModel are
-    assessed on the frequencies f.
+    ``F(s) + F(-s)^T``. A delayed PoleResidue and the terminal admittance of a LineModel are
+    assessed on the frequencies ``f``.
     """
     return _assess(model, f)[0]
 
@@ -68,10 +68,11 @@ def enforce_passivity(
     iterations: int = 20,
     weights: Weights = "relative_norm",
 ) -> Result[Admittance, CorrectionReport]:
-    """Passive model from the smallest weighted change of the residues and d of an admittance.
+    """Passive model from the smallest weighted change of the residues and ``d`` of an admittance.
 
-    The change is measured on f. A LineModel keeps h and corrects yc until yc is passive and the
-    terminal admittance is passive on f. Poles, delays and e are kept. Raises if not achieved.
+    The change is measured on ``f``. A LineModel keeps ``h`` and corrects ``yc`` until ``yc`` is
+    passive and the terminal admittance is passive on ``f``. Poles, delays and ``e`` are kept.
+    Raises if not achieved.
     """
     f = _frequencies(f)
     y = model.yc if isinstance(model, LineModel) else model
@@ -184,8 +185,9 @@ def _global(model, n):
     if infinity < -tol:
         witnesses.append(np.inf)
     worst = int(np.argmin(values))
+    passive = bool(values[worst] >= -tol)
     report = PassivityReport(
-        values[worst] >= -tol, "global", float(values[worst]), float(points[worst]), tuple(bands)
+        passive, "global", float(values[worst]), float(points[worst]), tuple(bands)
     )
     return report, np.array(witnesses)
 
