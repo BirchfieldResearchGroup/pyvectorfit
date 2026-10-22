@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pyvectorfit"
+version = "0.1.0"
+description = "Vector fitting of delayed pole-residue models for electromagnetic transient simulation"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Luke Lowery", email = "lukel@tamu.edu" }]
+requires-python = ">=3.11"
+keywords = ["vector fitting", "rational approximation", "electromagnetic transients", "transmission lines", "passivity"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering",
+    "Typing :: Typed",
+]
+dependencies = ["numpy>=2.0", "scipy>=1.14"]
+
+[project.urls]
+Repository = "https://github.com/BirchfieldResearchGroup/pyvectorfit"
+Issues = "https://github.com/BirchfieldResearchGroup/pyvectorfit/issues"
+
+[dependency-groups]
+test = ["pytest>=8"]
+bench = ["matplotlib>=3.9"]
+dev = [
+    { include-group = "test" },
+    { include-group = "bench" },
+    "mypy>=1.15",
+    "ruff>=0.15",
+    "scipy-stubs",
+]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md", "LICENSE"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--import-mode=importlib", "--strict-config", "--strict-markers", "-ra"]
+filterwarnings = ["error"]
+
+[tool.mypy]
+files = ["src"]
+check_untyped_defs = true
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "NPY", "PT", "RUF", "SIM", "UP", "W"]
