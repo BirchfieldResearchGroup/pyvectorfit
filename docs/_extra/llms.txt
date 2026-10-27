@@ -1,0 +1,23 @@
+# pyvectorfit
+
+> Python library for vector fitting of delayed pole-residue models for electromagnetic transient
+> (EMT) simulation: rational fitting, universal line models with searched modal delays, and
+> passivity assessment and enforcement, on plain NumPy arrays.
+
+Install with `pip install pyvectorfit`, for Python 3.11 to 3.14. Frequencies are in Hz; poles,
+residues and `s` in rad/s; delays in s. Samples have shape `(len(f), *shape)`, and every fit
+returns `model, report`. A model is its poles, residues and delays, saved with `to_dict()`.
+pyvectorfit takes per-metre `z` (Ω/m) and `y` (S/m) and does not compute them.
+
+## Docs
+
+- [Start here](https://pyvectorfit.readthedocs.io/en/latest/): installation and a line model quickstart
+- [Guide](https://pyvectorfit.readthedocs.io/en/latest/guide.html): conventions, the model, and the methods behind each step
+- [API](https://pyvectorfit.readthedocs.io/en/latest/api.html): fit, fit_line, check_passivity, enforce_passivity, recursive_convolution and their reports
+- [Examples](https://pyvectorfit.readthedocs.io/en/latest/gallery/index.html): fitting Yc, line models, modal delays, passivity, transients
+
+## Optional
+
+- [Benchmarks](https://pyvectorfit.readthedocs.io/en/latest/benchmarks.html): accuracy on six overhead lines and cables
+- [Source](https://github.com/BirchfieldResearchGroup/pyvectorfit/tree/main/src/pyvectorfit): the package and its docstrings
+- [OpenLine](https://openline.readthedocs.io/llms.txt): line constants of overhead lines, from conductor and structure catalogs

@@ -1,6 +1,8 @@
-"""One visual system for figures and docs: Inter, validated palettes, light and dark SVG.
+"""One visual system for figures and docs: Inter, steel and copper, light and dark SVG.
 
-Figures are drawn in the light colors; the dark SVG swaps each for its dark counterpart.
+Series C0 to C2 are steel blues stepped by lightness; C3 is copper, the accent, for poles and the
+one thing a figure points at. Figures are drawn in the light colors; the dark SVG swaps each for
+its dark counterpart.
 """
 
 import os
@@ -27,15 +29,11 @@ COLORS = {
     "brand": ("#a85419", "#e09864"),
     "black": ("#000000", "#e6e9ed"),
 }
-SERIES = (
-    ("#2a78d6", "#3987e5"),
-    ("#eb6834", "#d95926"),
-    ("#18a473", "#199e70"),
-    ("#bb8100", "#c98500"),
-    ("#d4588c", "#d55181"),
-    ("#008300", "#008300"),
-    ("#6250d6", "#9085e9"),
-    ("#e34948", "#e66767"),
+SERIES = (  # most prominent first in both themes; validated as an ordinal ramp
+    ("#1f4e8c", "#c2d9f8"),
+    ("#3b78c9", "#78a5ea"),
+    ("#86afe3", "#3561aa"),
+    COLORS["brand"],
 )
 LIGHT = {role: light for role, (light, _) in COLORS.items()}
 
@@ -50,17 +48,21 @@ RC = {
     "axes.edgecolor": LIGHT["axis"],
     "axes.facecolor": "none",
     "axes.grid": True,
+    "axes.grid.which": "major",
     "axes.labelcolor": LIGHT["secondary"],
+    "axes.labelpad": 6,
     "axes.labelsize": 9,
     "axes.linewidth": 0.8,
     "axes.prop_cycle": mpl.cycler(color=[light for light, _ in SERIES]),
+    "axes.spines.left": False,
     "axes.spines.right": False,
     "axes.spines.top": False,
     "axes.titlecolor": LIGHT["ink"],
     "axes.titlelocation": "left",
-    "axes.titlepad": 8,
-    "axes.titlesize": 9.5,
+    "axes.titlepad": 22,  # room for a legend between title and plot
+    "axes.titlesize": 10,
     "axes.titleweight": "semibold",
+    "axes.xmargin": 0,
     "figure.constrained_layout.h_pad": 0.06,
     "figure.constrained_layout.use": True,
     "figure.constrained_layout.w_pad": 0.06,
@@ -74,12 +76,13 @@ RC = {
     "legend.columnspacing": 1.6,
     "legend.fontsize": 8.5,
     "legend.frameon": False,
-    "legend.handlelength": 1.8,
+    "legend.handlelength": 1.4,
+    "legend.handletextpad": 0.6,
     "legend.labelcolor": LIGHT["secondary"],
-    "lines.linewidth": 1.4,
+    "lines.linewidth": 1.6,
     "lines.markeredgecolor": LIGHT["surface"],
-    "lines.markeredgewidth": 1.5,
-    "lines.markersize": 7,
+    "lines.markeredgewidth": 1.0,
+    "lines.markersize": 4.5,
     "lines.solid_capstyle": "round",
     "lines.solid_joinstyle": "round",
     "savefig.facecolor": "none",
@@ -89,13 +92,15 @@ RC = {
     "xtick.color": LIGHT["axis"],
     "xtick.labelcolor": LIGHT["muted"],
     "xtick.labelsize": 8,
-    "xtick.major.size": 3,
-    "xtick.minor.size": 1.5,
+    "xtick.major.pad": 5,
+    "xtick.major.size": 0,
+    "xtick.minor.size": 0,
     "ytick.color": LIGHT["axis"],
     "ytick.labelcolor": LIGHT["muted"],
     "ytick.labelsize": 8,
-    "ytick.major.size": 3,
-    "ytick.minor.size": 1.5,
+    "ytick.major.pad": 5,
+    "ytick.major.size": 0,
+    "ytick.minor.size": 0,
 }
 
 
@@ -115,8 +120,8 @@ def figure(rows=1, columns=1, *, height=2.6, **options):
 
 
 def legend(fig, ax, columns=4):
-    """One legend above the axes, at the right, from the labelled marks of ax."""
-    fig.legend(*ax.get_legend_handles_labels(), loc="outside upper right", ncols=columns)
+    """One legend above the axes, at the left, from the labelled marks of ax."""
+    fig.legend(*ax.get_legend_handles_labels(), loc="outside upper left", ncols=columns)
 
 
 def save(fig, stem):

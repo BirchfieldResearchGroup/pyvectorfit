@@ -97,6 +97,18 @@ article dd {
   line-height: 1.55;
 }
 
+/* Banner: no labels to keep readable, so it scales with the column on every screen */
+
+.banner {
+  margin: 1.75rem 0 1rem;
+}
+
+.banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* Figures: full column width; on phones they keep readable labels and scroll sideways */
 
 .plot {
@@ -238,6 +250,27 @@ table.numbers :is(th, td):not(:first-child) {
     padding-top: 0.25rem;
     border-top: 0;
   }
+}
+
+/* Author and project links at the end of the home page */
+
+#pyvectorfit #author {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-background-border);
+  font-size: var(--font-size--small);
+  color: var(--color-foreground-secondary);
+}
+
+#pyvectorfit #author > h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.125rem;
+}
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1.25rem;
 }
 
 /* Gallery */

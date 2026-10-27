@@ -6,7 +6,7 @@ Energize the fitted line in a time-stepping simulation and compare it with the e
 """
 
 # %%
-# The 100 km three-phase line again, fitted and made passive.
+# A 100 km three-phase line with two shield wires over 100 Ω·m earth, fitted and made passive.
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -39,16 +39,16 @@ print(f"largest difference {np.abs(emt - exact).max() / peak:.2%} of the peak vo
 
 # %%
 # The wave reaches the open end after 0.34 ms and doubles, and the induced voltages on phases
-# 2 and 3 follow every reflection. Pale bands are the exact response and lines the
+# 2 and 3 follow every reflection. Gray bands are the exact response and lines the
 # simulation, which stays on it through every wavefront.
 
 ms = 1e3 * dt * np.arange(steps)
 fig, (top, bottom) = plt.subplots(2, 1)
 for ax, window in ((top, slice(None)), (bottom, slice(320, 400))):
     for k in range(3):
-        ax.plot(ms[window], exact[window, k], color=f"C{k}", alpha=0.25, lw=5)
-        ax.plot(ms[window], emt[window, k], color=f"C{k}", lw=1.2, label=f"Phase {k + 1}")
+        ax.plot(ms[window], exact[window, k], color="k", alpha=0.12, lw=5)
+        ax.plot(ms[window], emt[window, k], color=f"C{k}", label=f"Phase {k + 1}")
 top.set(title="Receiving-end voltage (per unit)", xlabel="Time (ms)")
-top.legend(loc="lower right", bbox_to_anchor=(1, 1), ncols=3)
+top.legend(loc="lower left", bbox_to_anchor=(0, 1), ncols=3)
 bottom.set(title="First arrival", xlabel="Time (ms)")
 plt.show()

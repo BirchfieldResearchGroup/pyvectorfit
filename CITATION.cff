@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: If you use pyvectorfit, cite the release you used.
+type: software
+title: pyvectorfit
+abstract: Vector fitting of delayed pole-residue models for electromagnetic transient simulation.
+authors:
+  - family-names: Lowery
+    given-names: Luke
+    affiliation: Texas A&M University
+    orcid: https://orcid.org/0009-0000-0029-3403
+repository-code: https://github.com/BirchfieldResearchGroup/pyvectorfit
+url: https://pyvectorfit.readthedocs.io
+license: MIT
+keywords:
+  - vector fitting
+  - rational approximation
+  - electromagnetic transients
+  - universal line model
+  - passivity

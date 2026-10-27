@@ -1,7 +1,7 @@
-Case,Poles Yc / H,Delays (µs),Yc error,Terminal error,Passivity fix,EMT error
-"Single conductor, 50 km",10 / 10,167,0.095 %,0.36 %,0.0070 %,—
-"Three-phase, 100 km",12 / 24,"333, 338",0.039 %,0.56 %,none,0.21 %
-"Bundled 500 kV, 300 km",12 / 32,"1001, 1089",0.055 %,0.62 %,none,—
-"Double circuit, 150 km",14 / 24,"500, 515",0.0099 %,0.31 %,none,—
-"Cables in flat, 10 km",16 / 56,"56, 212, 267, 622",0.056 %,0.30 %,0.0047 %,0.82 %
-"Cables in trefoil, 5 km",16 / 42,"28, 74, 303",0.036 %,0.46 %,0.013 %,—
+Case,Poles Yc / H,Delays (µs),Yc error,H error,Terminal error,Passivity fix,EMT error
+"Single conductor, 50 km",10 / 10,167,0.095 %,20 %,0.36 %,0.0070 %,—
+"Three-phase, 100 km",12 / 24,"333, 338",0.039 %,0.31 %,0.56 %,none,0.21 %
+"Bundled 500 kV, 300 km",12 / 32,"1001, 1089",0.055 %,0.72 %,0.62 %,none,—
+"Double circuit, 150 km",14 / 24,"500, 515",0.0099 %,0.39 %,0.31 %,none,—
+"Cables in flat, 10 km",16 / 56,"56, 212, 267, 622",0.056 %,0.25 %,0.30 %,0.0047 %,0.82 %
+"Cables in trefoil, 5 km",16 / 42,"28, 74, 303",0.036 %,0.14 %,0.46 %,0.013 %,—

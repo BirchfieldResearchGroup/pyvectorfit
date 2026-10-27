@@ -52,9 +52,9 @@ for modes in map(list, report.groups):
     print(f"modes {modes}: valley at {valley:.3f} times the phase delay")
 
 # %%
-# With the phase delays instead, the earth-return mode starts too early, and the terminal
-# admittance an EMT program uses is off by up to 72 %. The searched delays keep it within
-# 0.4 %.
+# With the phase delays instead, the earth-return mode starts too early: the propagation is
+# off by up to 106 %, and the terminal admittance an EMT program uses by 72 %. The searched
+# delays keep both within 0.3 %.
 
 fixed, _ = vf.fit_line(f, z, y, case.length, delays="phase", **options)
 fv = np.geomspace(0.1, 1e6, 1401)
@@ -62,17 +62,20 @@ exact = vf.line_functions(*case.system.zy(2j * np.pi * fv), case.length)
 reference = vf.terminal_admittance(exact.yc, exact.h)
 
 fig, (top, bottom) = plt.subplots(2, 1)
-for scan, tau in zip(scans, line.h.delays, strict=True):
-    top.semilogy(ratios, scan, label=f"{1e6 * tau:.0f} µs")
+colors = ("C0", "C1", "C2", "C3")  # the earth-return group, last, in copper
+for scan, tau, color in zip(scans, line.h.delays, colors, strict=True):
+    top.semilogy(ratios, scan, color=color, label=f"{1e6 * tau:.0f} µs")
 top.axvline(1, color="k", alpha=0.3, lw=1)
 top.set(title="Modal residual against delay", xlabel="Delay / phase delay at 1 MHz")
-top.legend(loc="lower right", bbox_to_anchor=(1, 1), ncols=4)
+top.legend(loc="lower left", bbox_to_anchor=(0, 1), ncols=4)
 
-for model, label in ((line, "Searched delays"), (fixed, "Phase delays")):
-    terminal = vf.terminal_admittance(model.yc.response(fv), model.h.response(fv))
-    error = vf.relative_error(terminal, reference)
-    bottom.loglog(fv, error, lw=1.2, label=f"{label}, max {error.max():.1%}")
+for model, label, color in ((line, "Searched delays", "C0"), (fixed, "Phase delays", "C3")):
+    h = model.h.response(fv)
+    error = vf.relative_error(h, exact.h)
+    terminal = vf.relative_error(vf.terminal_admittance(model.yc.response(fv), h), reference)
+    print(f"{label}: H within {error.max():.1%}, terminal admittance within {terminal.max():.1%}")
+    bottom.loglog(fv, error, color=color, label=f"{label}, max {error.max():.1%}")
 bottom.xaxis.set_major_formatter(EngFormatter("Hz"))
-bottom.set(title="Terminal admittance error", xlabel="Frequency")
-bottom.legend(loc="lower right", bbox_to_anchor=(1, 1), ncols=2)
+bottom.set(title="Propagation error", xlabel="Frequency")
+bottom.legend(loc="lower left", bbox_to_anchor=(0, 1), ncols=2)
 plt.show()

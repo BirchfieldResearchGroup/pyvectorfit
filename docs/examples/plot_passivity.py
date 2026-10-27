@@ -54,13 +54,13 @@ def conductance(model, f):
 band = np.linspace(50, 1200, 801)
 fig, (top, bottom) = plt.subplots(2, 1)
 for lo, hi in before.bands:
-    top.axvspan(lo, hi, color="C1", alpha=0.12, lw=0)
-top.plot(band, 1e6 * conductance(fitted, band), color="C1", label="Fitted")
+    top.axvspan(lo, hi, color="C3", alpha=0.12, lw=0)
+top.plot(band, 1e6 * conductance(fitted, band), color="C3", label="Fitted")
 top.plot(band, 1e6 * conductance(line, band), color="C0", label="Passive")
 top.axhline(0, color="k", alpha=0.4, lw=0.8)
 top.xaxis.set_major_formatter(EngFormatter("Hz"))
 top.set(title="Smallest conductance (µS)", xlabel="Frequency")
-top.legend(loc="lower right", bbox_to_anchor=(1, 1), ncols=2)
+top.legend(loc="lower left", bbox_to_anchor=(0, 1), ncols=2)
 
 change = vf.relative_error(line.yc.response(fv), fitted.yc.response(fv))
 bottom.loglog(fv, change, color="C0")

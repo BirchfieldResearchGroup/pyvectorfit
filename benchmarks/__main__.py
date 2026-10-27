@@ -14,7 +14,7 @@ from matplotlib.ticker import EngFormatter
 
 import pyvectorfit as vf
 
-from . import transient
+from . import banner, transient
 from .cases import CASES, HORIZONTAL, Case
 from .style import figure, legend, save
 
@@ -90,33 +90,35 @@ def plot_accuracy(results):
 
 
 def orders():
-    """Maximum errors of Yc and of the terminal admittance against the number of poles."""
+    """Maximum errors of Yc, H and the terminal admittance against the number of poles."""
     table = {}
     for name, case in CASES.items():
         f, fv = grids(case.band)
         samples = vf.line_functions(*case.system.zy(2j * np.pi * f), case.length).yc
         exact = vf.line_functions(*case.system.zy(2j * np.pi * fv), case.length).yc
-        yc, terminal = [], []
+        row = {key: [] for key in ERRORS}
         for order in ORDERS:
             model = vf.fit(f, samples, poles=order, symmetric=True).model
-            yc.append(vf.relative_error(model.response(fv), exact).max())
-            terminal.append(errors(fit(case, h_poles=order)[0], case, fv)["terminal"].max())
-        table[name] = {"yc": yc, "terminal": terminal}
+            row["yc"].append(vf.relative_error(model.response(fv), exact).max())
+            line_errors = errors(fit(case, h_poles=order)[0], case, fv)
+            row["h"].append(line_errors["h"].max())
+            row["terminal"].append(line_errors["terminal"].max())
+        table[name] = row
     return table
 
 
 def plot_orders(table):
-    """Errors against poles: Yc poles for Yc, H poles per delay group for the terminal."""
+    """Errors against poles: Yc poles for Yc, H poles per delay group for H and the terminal."""
     fig, axes = figure(2, 3, height=2.0, sharex=True, sharey=True)
     for ax, (name, row) in zip(axes.flat, table.items(), strict=True):
-        ax.semilogy(ORDERS, row["yc"], label=ERRORS["yc"])
-        ax.semilogy(ORDERS, row["terminal"], "C2", label=ERRORS["terminal"])
+        for key, label in ERRORS.items():
+            ax.semilogy(ORDERS, row[key], label=label)
         ax.set(title=CASES[name].title, xticks=ORDERS[::2])
     for ax in axes[-1]:
         ax.set_xlabel("Poles")
     for ax in axes[:, 0]:
         ax.set_ylabel("Maximum relative error")
-    legend(fig, axes[0, 0], columns=2)
+    legend(fig, axes[0, 0], columns=3)
     save(fig, DOCS / "orders")
 
 
@@ -182,6 +184,7 @@ def summary(results, transient_table):
                 "Poles Yc / H": f"{line.yc.order} / {line.h.order}",
                 "Delays (µs)": ", ".join(f"{1e6 * tau:.0f}" for tau in line.h.delays),
                 "Yc error": _percent(item["errors"]["yc"].max()),
+                "H error": _percent(item["errors"]["h"].max()),
                 "Terminal error": _percent(item["errors"]["terminal"].max()),
                 "Passivity fix": _percent(correction.change) if correction.iterations else "none",
                 "EMT error": _percent(emt["emt"]) if emt else "—",
@@ -211,6 +214,7 @@ def _rounded(value):
 
 def main():
     DOCS.mkdir(parents=True, exist_ok=True)
+    banner.write()
     results = lines()
     plot_accuracy(results)
     order_table = orders()
@@ -248,7 +252,9 @@ def main():
         "transients": transient_table,
         "sweeps": sweep_table,
     }
-    RESULTS.write_text(json.dumps(_rounded(report), indent=2) + "\n", encoding="utf-8")
+    RESULTS.write_text(
+        json.dumps(_rounded(report), indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
 
 
 if __name__ == "__main__":

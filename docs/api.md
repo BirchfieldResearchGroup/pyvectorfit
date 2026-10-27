@@ -1,3 +1,9 @@
+---
+myst:
+  html_meta:
+    description: "Every function and class pyvectorfit exports, for vector fitting, line models, passivity and the time domain."
+---
+
 # API
 
 Every name below is importable from `pyvectorfit`, which the examples import as `vf`.

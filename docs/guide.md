@@ -1,3 +1,9 @@
+---
+myst:
+  html_meta:
+    description: "Conventions, the delayed pole-residue model, and the methods of pyvectorfit: relaxed vector fitting, modal delay search, passivity enforcement and recursive convolution."
+---
+
 # Guide
 
 Conventions, the model, and the methods behind each step.

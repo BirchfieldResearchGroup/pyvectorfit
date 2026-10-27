@@ -1,5 +1,6 @@
 """Sphinx configuration: Furo, MyST pages, a sphinx-gallery of examples and autodoc."""
 
+import os
 import re
 import sys
 from importlib import metadata
@@ -26,10 +27,23 @@ exclude_patterns = ["_build", "examples"]
 myst_enable_extensions = ["colon_fence", "deflist", "dollarmath"]
 
 autodoc_member_order = "bysource"
-autodoc_typehints = "description"
+autodoc_typehints = "signature"
+autodoc_typehints_format = "short"
+autodoc_preserve_defaults = True
+add_module_names = False
+python_maximum_signature_line_length = 88  # longer signatures take a line per parameter
 python_display_short_literal_types = True
+nitpicky = True
+nitpick_ignore_regex = [(r"py:.*", r"(?!pyvectorfit).*")]  # only our own references must resolve
+nitpick_ignore = [  # type variables, which have no entry to link to
+    ("py:class", "pyvectorfit._model.M"),
+    ("py:class", "pyvectorfit._model.R"),
+    ("py:class", "pyvectorfit._passivity.Admittance"),
+]
 intersphinx_mapping = {
+    "matplotlib": ("https://matplotlib.org/stable", None),
     "numpy": ("https://numpy.org/doc/stable", None),
+    "openline": ("https://openline.readthedocs.io/en/latest", None),
     "python": ("https://docs.python.org/3", None),
 }
 
@@ -44,6 +58,8 @@ sphinx_gallery_conf = {
     "download_all_examples": False,
     "show_signature": False,
     "write_computation_times": False,
+    "doc_module": ("pyvectorfit",),
+    "reference_url": {"pyvectorfit": None},  # example code links to the API
 }
 THUMBNAIL = re.compile(
     r"(?m)^( *)\.\. image:: /gallery/images/thumb/sphx_glr_(\w+)_thumb\.svg\n( +):alt:\n"
@@ -102,11 +118,17 @@ pygments_dark_style = "github-dark"
 html_logo = "_static/logo.svg"
 html_favicon = "_static/logo.svg"
 html_static_path = ["_static", "../benchmarks/fonts"]
+html_extra_path = ["_extra"]  # llms.txt, at the root of the site
 html_css_files = ["custom.css"]
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")  # each page's canonical link
+html_copy_source = False
+html_use_index = False
+html_domain_indices = False
 html_theme_options = {
     "light_css_variables": palette(0),
     "dark_css_variables": palette(1),
     "top_of_page_buttons": [],
+    "navigation_with_keys": True,
     "footer_icons": [
         {
             "name": "GitHub",

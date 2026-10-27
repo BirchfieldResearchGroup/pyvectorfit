@@ -11,7 +11,16 @@ license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Luke Lowery", email = "lukel@tamu.edu" }]
 requires-python = ">=3.11"
-keywords = ["vector fitting", "rational approximation", "electromagnetic transients", "transmission lines", "passivity"]
+keywords = [
+    "vector fitting",
+    "rational approximation",
+    "electromagnetic transients",
+    "EMT",
+    "universal line model",
+    "frequency-dependent line model",
+    "transmission lines",
+    "passivity",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
@@ -38,7 +47,8 @@ docs = [
     { include-group = "bench" },
     "furo>=2025.12.19",
     "myst-parser>=5",
-    "sphinx>=9",
+    "openline>=2026.10.27; python_version >= '3.12'",  # the line model example's line constants
+    "sphinx>=9,<10",
     "sphinx-copybutton>=0.5.2",
     "sphinx-gallery>=0.22",
 ]

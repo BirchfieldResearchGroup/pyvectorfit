@@ -1,8 +1,15 @@
+---
+myst:
+  html_meta:
+    description: "Accuracy of pyvectorfit on six overhead lines and cables from 0.1 Hz to 1 MHz, in frequency and in EMT transients."
+---
+
 # Benchmarks
 
 Six overhead lines and underground cables, fitted from 0.1 Hz to 1 MHz with 20 samples per
 decade. Errors are the largest relative errors on a validation grid ten times denser that avoids
-the fitting samples. The passivity fix is the largest relative change that
+the fitting samples; the error of $H$ can grow where the propagation has decayed, as
+{ref}`below <accuracy>`. The passivity fix is the largest relative change that
 {func}`~pyvectorfit.enforce_passivity` made to $Y_c$, and the EMT error the largest difference
 from the exact line during energization, relative to the peak voltage.
 `python -m benchmarks` regenerates every number and figure here.
@@ -13,6 +20,7 @@ from the exact line during energization, relative to the peak voltage.
 :class: numbers
 ```
 
+(accuracy)=
 ## Accuracy
 
 The characteristic admittance, propagation and terminal admittance of every case, across the
@@ -32,17 +40,19 @@ grow where the propagation has decayed and no longer matters.
 
 ## Model order
 
-Errors fall steadily with the number of poles until the terminal admittance reaches the
-accuracy of $Y_c$. The terminal admittance is plotted against the poles per delay group of $H$.
+$Y_c$ is plotted against its poles, and $H$ and the terminal admittance against the poles per
+delay group of $H$. The error of $Y_c$ falls steadily, and the terminal admittance follows
+until it reaches the accuracy of $Y_c$. $H$ falls less evenly; on the single conductor its
+error stays high where the propagation has decayed, as {ref}`above <accuracy>`.
 
 :::{container} plot
 ```{image} _static/benchmarks/orders.svg
 :class: only-light
-:alt: Maximum errors of Yc and the terminal admittance against the number of poles
+:alt: Maximum errors of Yc, H and the terminal admittance against the number of poles
 ```
 ```{image} _static/benchmarks/orders-dark.svg
 :class: only-dark
-:alt: Maximum errors of Yc and the terminal admittance against the number of poles
+:alt: Maximum errors of Yc, H and the terminal admittance against the number of poles
 ```
 :::
 
